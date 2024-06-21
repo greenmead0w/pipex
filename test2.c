@@ -115,7 +115,7 @@ char	**ft_split(const char *s, char c)
 
 int main(int argc, char **argv) 
 {
-    const char *string = "";
+    const char *string = " ";
     char **result = ft_split(string, ' ');
     while (*result != NULL)
     {
@@ -124,5 +124,4 @@ int main(int argc, char **argv)
     }
     printf("result is: %s\n", *result);
     return (0);
-}
-*/
+}*/
