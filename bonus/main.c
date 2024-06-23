@@ -54,12 +54,26 @@ int main(int argc, char **argv, char **envp)
     t_clarg *clarg;
 
     clarg = NULL;
-    if (argc != 5)
-        cleanup(clarg, WRNG_ARGS, NULL); //could have called handle_error directly
-    fill_clarg(argc, argv, envp, &clarg);
+    if (argc < 5) //bonus
+        cleanup(clarg, WRNG_ARGS, NULL);
+    if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])) == 0)
+    {
+        if (argc < 6)
+            cleanup(clarg, WRNG_ARGS, NULL);
+        fill_clarg(argc, argv, envp, &clarg);
+        clarg->hd_delimeter = argv[2]; //any word can be a delimeter
+        clarg->infile_fd = heredoc_to_infile(clarg);
+    }
+    else
+    {
+        fill_clarg(argc, argv, envp, &clarg);    
+        clarg->infile_fd = open(argv[1], O_RDONLY);
+        if (clarg->infile_fd == -1)
+            cleanup(clarg, INFILE, NULL);
+    }
     clarg->cmds_header = fill_lcmd(clarg, argc, argv);
     pipex(clarg, envp);
-    cleanup(clarg, "succes!", NULL);
+    cleanup(clarg, NULL, NULL);
     return 0;
 }
 

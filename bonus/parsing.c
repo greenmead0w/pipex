@@ -1,5 +1,34 @@
 #include "./pipex.h"
 
+//writes input from here_doc to a newly created infile using get next line
+int heredoc_to_infile(t_clarg *clarg)
+{
+	int new_fd;
+	char *line;
+
+    new_fd = open("infile.txt", O_RDWR | O_CREAT, 0666);
+	if (new_fd == -1)
+		cleanup(clarg, HD_INFILE, NULL);
+    while (1) 
+	{
+		line = get_next_line(STDIN_FILENO);
+		if (line == NULL)
+			break;
+        if (ft_strncmp(line, clarg->hd_delimeter, ft_strlen(clarg->hd_delimeter)) == 0)
+		{
+			free(line);
+			break;
+		}
+		write(new_fd, line, ft_strlen(line));
+		free(line);
+    }
+	close(new_fd);
+    new_fd = open("infile.txt", O_RDONLY);
+	if (new_fd == -1)
+		cleanup(clarg, HD_INFILE, NULL);
+	return new_fd;
+}
+
 //get path to cmd executable
 char *	get_cmd_path(t_clarg *clarg, char *cmd)
 {
@@ -38,7 +67,10 @@ t_lcmd	*fill_lcmd(t_clarg *clarg, int argc, char **argv)
     int i;
 
 	cmds = NULL;
-    i = 2;
+    if (clarg->hd_delimeter == NULL) //bonus
+		i = 2; //bonus
+	else //bonus
+		i = 3; //bonus
 	while (i < argc -1)
 	{
 		cmd = ft_split(argv[i], ' '); 
@@ -55,25 +87,27 @@ t_lcmd	*fill_lcmd(t_clarg *clarg, int argc, char **argv)
 }
 
 
-/*fills struct with command line arguments: infile and outfile fds, env_path
+/*fills struct with command line arguments: outfile fd, env_path and 
+nulls cmds_header and hd_delimeter
+infile_fd set to -2 to act as sentinel in case cleanup is called (prevents cleanup 
+errors)
 */
 void fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg) 
 {
     *clarg = malloc(sizeof(struct s_clarg));
     if (*clarg == NULL)
-        cleanup(*clarg, MALLOC, NULL); // cleanup function missing
+        cleanup(*clarg, MALLOC, NULL);
     (*clarg)->cmds_header = NULL;
-    (*clarg)->infile_fd = open(argv[1], O_RDONLY);
-    if ((*clarg)->infile_fd == -1) // can fail because no infile found, or infile has no read permissions
-        cleanup(*clarg, INFILE, NULL); // cleanup function missing
-    (*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0777);
+	(*clarg)->hd_delimeter = NULL; //bonus
+	(*clarg)->infile_fd = -2; //bonus, sentinel value
+    (*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0666); //WHY APPEND?
     if ((*clarg)->outfile_fd == -1)
-        cleanup(*clarg, OUTFILE, NULL); // cleanup function missing
+        cleanup(*clarg, OUTFILE, NULL);
     while (*envp && ft_strncmp(*envp, "PATH", 4))
         envp++;
     if (*envp == NULL)
-        cleanup(*clarg, NO_PATH, NULL); // cleanup function missing
+        cleanup(*clarg, NO_PATH, NULL);
     (*clarg)->path_all = ft_split(*envp + 5, ':'); // +5 done not to copy "PATH="
     if ((*clarg)->path_all == NULL || *((*clarg)->path_all) == NULL)
-        cleanup(*clarg, SPLIT, NULL); // cleanup function missing
+        cleanup(*clarg, SPLIT, NULL);
 }

@@ -15,6 +15,12 @@
 
 # include <unistd.h>
 # include <stdlib.h>
+#include  <fcntl.h>
+
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 10
+# endif
+
 
 typedef struct s_list
 {
@@ -67,5 +73,6 @@ void	ft_putnbr_fd(int n, int fd);
 void	ft_putendl_fd(char *s, int fd);
 char	*ft_itoa(int n);
 void	ft_lstiter(t_list *lst, void (*f)(void *));
+char *get_next_line(int fd);
 
 #endif

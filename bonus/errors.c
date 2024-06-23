@@ -54,19 +54,28 @@ void free_lcmd_list(t_lcmd *head)
 //flag only non-null when ft_strjoin returns null
 void *cleanup(t_clarg *clarg, char *message, char *flag)
 {
+    static int sentinel = 0;
+
     if (flag != NULL)
         free(flag);
     if (clarg != NULL)
     {
-        // close stdin and stdout??
-        close(clarg->infile_fd);
+        if (sentinel != -1 && clarg->infile_fd  >= 0)
+            close(clarg->infile_fd);
+        sentinel = -1;
+        if (message == NULL && clarg->hd_delimeter != NULL)
+        {
+            if (unlink("infile.txt") == -1)
+                cleanup(clarg, UNLINK, NULL);
+        }
         close(clarg->outfile_fd);
         free_split(&(clarg->path_all));
         if (clarg->cmds_header != NULL)
             free_lcmd_list(clarg->cmds_header);
         free(clarg);
     }
-    handle_error(message);
+    if (message != NULL)
+        handle_error(message);
     return (0);
 }
 

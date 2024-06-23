@@ -8,9 +8,10 @@
 
 //List of errors to print
 
-#define WRNG_ARGS "Errror: invalid arguments. Usage: ./pipex infile cmd1 cmd2 outfile"
+#define WRNG_ARGS "Errror: invalid arguments. Usage: ./pipex infile cmd1 cmd2 outfile OR ./pipex here_doc DELIMETER cmd1 cmd2 outfile"
 #define MALLOC "Error: malloc"
 #define INFILE "Error: infile failure" //errno will specify type of infile error (no file, no permission, etc.)
+#define HD_INFILE "Error: here_doc infile failure"
 #define OUTFILE "Error: outfile failure" //errno will specify
 #define NO_PATH "Error: no path found"
 #define SPLIT "Error: ft_split function" //to be modified, why is ft_split erroring?
@@ -21,6 +22,7 @@
 #define PIPE "Error: pipe function"
 #define FORK "Error: fork function"
 #define EXECVE "Error: execve function"
+#define UNLINK "Error: unlink function"
 
 //struct including data about infile, outfile, cmds and PATH env
 typedef struct s_clarg
@@ -29,6 +31,7 @@ typedef struct s_clarg
 	int		outfile_fd;
     struct s_lcmd	*cmds_header; //pointer to the head of the commands data linked list
 	char	**path_all;
+	char * hd_delimeter; //bonus
 }				t_clarg;
 
 //struct of a node making up a linked list 
@@ -49,6 +52,7 @@ void *cleanup(t_clarg *clarg, char *message, char *flag);
 void fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg);
 t_lcmd	*fill_lcmd(t_clarg *clarg, int argc, char **argv);
 char *	get_cmd_path(t_clarg *clarg, char *cmd);
+int heredoc_to_infile(t_clarg *clarg);
 
 //utils.c
 t_lcmd *create_node(char *path_cmd, char **cmd);

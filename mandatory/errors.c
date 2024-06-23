@@ -59,7 +59,8 @@ void *cleanup(t_clarg *clarg, char *message, char *flag)
     if (clarg != NULL)
     {
         // close stdin and stdout??
-        close(clarg->infile_fd);
+        if(clarg->infile_fd != -1)
+            close(clarg->infile_fd);
         close(clarg->outfile_fd);
         free_split(&(clarg->path_all));
         if (clarg->cmds_header != NULL)
