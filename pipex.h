@@ -5,9 +5,8 @@
 # include <stdio.h> // perror
 #include <errno.h>
 #include "./pipex_libft/libft.h"
-//to add, libft
 
-//LIST OF ERRORS TO PRINT
+//List of errors to print
 
 #define WRNG_ARGS "Errror: invalid arguments. Usage: ./pipex infile cmd1 cmd2 outfile"
 #define MALLOC "Error: malloc"
@@ -18,7 +17,10 @@
 #define SPLIT_COMMAND "Error: ft_split function or command not found" // to be modified
 #define STR_JOIN "Error: ft_strjoin function" //to be modified
 #define NO_CMD_PATH "Error: no command executable path found"
-
+#define DUP2 "Error: dup2 function"
+#define PIPE "Error: pipe function"
+#define FORK "Error: fork function"
+#define EXECVE "Error: execve function"
 
 //struct including data about infile, outfile, cmds and PATH env
 typedef struct s_clarg
@@ -39,9 +41,12 @@ typedef struct s_lcmd
 
 //errors.c
 void *handle_error(const char * message);
+void free_split(char ***cmd);
+void free_lcmd_list(t_lcmd *head);
+void *cleanup(t_clarg *clarg, char *message, char *flag);
 
 //parsing.c
-t_clarg *fill_clarg(int argc, char **argv, char **envp);
+void fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg);
 t_lcmd	*fill_lcmd(t_clarg *clarg, int argc, char **argv);
 char *	get_cmd_path(t_clarg *clarg, char *cmd);
 

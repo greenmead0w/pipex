@@ -4,8 +4,8 @@
 t_lcmd *create_node(char *path_cmd, char **cmd)
 {
     t_lcmd *new_node = malloc(sizeof(struct s_lcmd));
-    if (!new_node)
-        return (handle_error(MALLOC)) ; //clean up function missing
+    if (new_node == NULL)
+        return (NULL) ;
     new_node->path_cmd = path_cmd;
     new_node->cmd = cmd;
     new_node->next = NULL;
