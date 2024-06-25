@@ -28,6 +28,9 @@ void free_split(char ***cmd)
     i = 0;
     if (cmd == NULL || *cmd == NULL)
         return;
+    if (*cmd == NULL)
+        return;
+
     while ((*cmd)[i] != NULL)
     {
         free((*cmd)[i]);
@@ -41,6 +44,7 @@ void free_split(char ***cmd)
 void free_lcmd_list(t_lcmd *head) 
 {
     t_lcmd *temp;
+
     while (head != NULL) 
     {
         temp = head;
@@ -52,21 +56,18 @@ void free_lcmd_list(t_lcmd *head)
 }
 
 //flag only non-null when ft_strjoin returns null
-void *cleanup(t_clarg *clarg, char *message, char *flag)
+void *cleanup(t_clarg *clarg, char *message)
 {
     static int sentinel = 0;
-
-    if (flag != NULL)
-        free(flag);
     if (clarg != NULL)
     {
         if (sentinel != -1 && clarg->infile_fd  >= 0)
             close(clarg->infile_fd);
         sentinel = -1;
-        if (message == NULL && clarg->hd_delimeter != NULL)
+        if (clarg->hd_delimiter != NULL && ft_strncmp(message, UNLINK, ft_strlen(message)) != 0)
         {
-            if (unlink("infile.txt") == -1)
-                cleanup(clarg, UNLINK, NULL);
+            if (unlink("karaket.txt") == -1)
+                cleanup(clarg, UNLINK);
         }
         close(clarg->outfile_fd);
         free_split(&(clarg->path_all));
@@ -74,7 +75,7 @@ void *cleanup(t_clarg *clarg, char *message, char *flag)
             free_lcmd_list(clarg->cmds_header);
         free(clarg);
     }
-    if (message != NULL)
+    if (ft_strncmp(message, END, ft_strlen(message)) != 0)
         handle_error(message);
     return (0);
 }

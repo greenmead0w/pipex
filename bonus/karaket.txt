@@ -1,4 +1,0 @@
-pattern
-pattern pattern
-11 something
-something

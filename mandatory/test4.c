@@ -6,8 +6,8 @@
 #include <errno.h>
 #include "./pipex_libft/libft.h"
 
-int main(int argc, char *argv)
+/*int main(int argc, char *argv)
 {
     printf("argc is: %d\n", argc);
     return (0);
-}
+}*/

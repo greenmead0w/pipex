@@ -86,7 +86,7 @@ char	**ft_split(const char *s, char c)
 		i++;
 	}
 	pointer[i] = NULL;
-	return (pointer);
+	return (pointer); 
 }
 /*int main(void)
 {

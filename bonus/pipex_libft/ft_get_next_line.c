@@ -1,88 +1,67 @@
 #include "libft.h"
 
-char	*ft_free(char **str)
+static char	*function_name(int fd, char *buf, char *backup)
 {
-	free(*str);
-	*str = NULL;
-	return (NULL);
-}
+	int		read_line;
+	char	*char_temp;
 
-char	*clean_storage(char *storage)
-{
-	char	*new_storage;
-	char	*ptr;
-	int		len;
-
-	ptr = ft_strchr(storage, '\n');
-	if (!ptr)
+	read_line = 1;
+	while (read_line != '\0')
 	{
-		new_storage = NULL;
-		return (ft_free(&storage));
+		read_line = read(fd, buf, BUFFER_SIZE);
+		if (read_line == -1)
+			return (0);
+		else if (read_line == 0)
+			break ;
+		buf[read_line] = '\0';
+		if (!backup)
+			backup = ft_strdup("");
+		char_temp = backup;
+		backup = ft_strjoin(char_temp, buf);
+		free(char_temp);
+		char_temp = NULL;
+		if (ft_strchr (buf, '\n'))
+			break ;
 	}
-	else
-		len = (ptr - storage) + 1;
-	if (!storage[len])
-		return (ft_free(&storage));
-	new_storage = ft_substr(storage, len, ft_strlen(storage) - len);
-	ft_free(&storage);
-	if (!new_storage)
-		return (NULL);
-	return (new_storage);
+	return (backup);
 }
 
-char	*new_line(char *storage)
+static char	*extract(char *line)
 {
-	char	*line;
-	char	*ptr;
-	int		len;
+	size_t	count;
+	char	*backup;
 
-	ptr = ft_strchr(storage, '\n');
-	len = (ptr - storage) + 1;
-	line = ft_substr(storage, 0, len);
-	if (!line)
-		return (NULL);
-	return (line);
-}
-
-char	*readbuf(int fd, char *storage)
-{
-	int		rid;
-	char	*buffer;
-
-	rid = 1;
-	buffer = malloc(sizeof(char) * (BUFFER_SIZE + 1));
-	if (!buffer)
-		return (ft_free(&storage));
-	buffer[0] = '\0';
-	while (rid > 0 && !ft_strchr(buffer, '\n'))
+	count = 0;
+	while (line[count] != '\n' && line[count] != '\0')
+		count++;
+	if (line[count] == '\0' || line[1] == '\0')
+		return (0);
+	backup = ft_substr(line, count + 1, ft_strlen(line) - count);
+	if (*backup == '\0')
 	{
-		rid = read (fd, buffer, BUFFER_SIZE);
-		if (rid > 0)
-		{
-			buffer[rid] = '\0';
-			storage = ft_strjoin(storage, buffer);
-		}
+		free(backup);
+		backup = NULL;
 	}
-	free(buffer);
-	if (rid == -1)
-		return (ft_free(&storage));
-	return (storage);
+	line[count + 1] = '\0';
+	return (backup);
 }
 
 char	*get_next_line(int fd)
 {
-	static char	*storage = {0};
 	char		*line;
+	char		*buf;
+	static char	*backup;
 
-	if (fd < 0)
-		return (NULL);
-	if ((storage && !ft_strchr(storage, '\n')) || !storage)
-		storage = readbuf (fd, storage);
-	if (!storage)
-		return (NULL);
-	line = new_line(storage);
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (0);
+	buf = (char *)malloc(sizeof(char) * (BUFFER_SIZE + 1));
+	if (!buf)
+		return (0);
+	line = function_name(fd, buf, backup);
+	free(buf);
+	buf = NULL;
 	if (!line)
-		return (ft_free(&storage));
-	storage = clean_storage(storage);
+		return (NULL);
+	backup = extract(line);
 	return (line);
 }

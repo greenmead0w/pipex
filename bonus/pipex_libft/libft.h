@@ -21,6 +21,10 @@
 #  define BUFFER_SIZE 10
 # endif
 
+# ifndef MAX_FD
+#  define MAX_FD 1024
+# endif
+
 
 typedef struct s_list
 {

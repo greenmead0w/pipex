@@ -25,7 +25,7 @@ char *	get_cmd_path(t_clarg *clarg, char *cmd)
 		path_iter++;
 	}
 	free(end);
-	return ((char *)cleanup(clarg, NO_CMD_PATH, NULL));
+	return (NULL);
 }
 
 /*fills struct t_lcmd for as many cmds as there are*/
@@ -45,6 +45,12 @@ t_lcmd	*fill_lcmd(t_clarg *clarg, int argc, char **argv)
 		if (cmd == NULL || *cmd == NULL) //ft_split("",' ') returns pointer to {NULL}, segfault if ft_split(NULL, ' ') (maybe need to modify ft_split for this case)
 			return ((t_lcmd *)cleanup(clarg, SPLIT_COMMAND, NULL)); 
 		path_cmd = get_cmd_path(clarg, *cmd); // gets full path to executable
+		if (path_cmd == NULL)
+		{
+			free_lcmd_list(cmds);
+			free_split(&cmd);
+			return ((t_lcmd *)cleanup(clarg, NO_CMD_PATH, NULL));
+		}
 		new_node = create_node(path_cmd, cmd);
 		if (new_node == NULL)
 			return((t_lcmd *)cleanup(clarg, MALLOC, NULL));
