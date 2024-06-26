@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzuloaga <mzuloaga@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: mzuloaga <mzuloaga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/21 08:49:34 by mzuloaga          #+#    #+#             */
-/*   Updated: 2024/01/30 16:48:28 by mzuloaga         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:47:28 by mzuloaga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-#include  <fcntl.h>
+# include <fcntl.h>
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 10
@@ -24,7 +24,6 @@
 # ifndef MAX_FD
 #  define MAX_FD 1024
 # endif
-
 
 typedef struct s_list
 {
@@ -77,6 +76,6 @@ void	ft_putnbr_fd(int n, int fd);
 void	ft_putendl_fd(char *s, int fd);
 char	*ft_itoa(int n);
 void	ft_lstiter(t_list *lst, void (*f)(void *));
-char *get_next_line(int fd);
+char	*get_next_line(int fd);
 
 #endif

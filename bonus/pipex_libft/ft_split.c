@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mzuloaga <mzuloaga@student.42urduliz.co    +#+  +:+       +#+        */
+/*   By: mzuloaga <mzuloaga@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/29 11:27:48 by mzuloaga          #+#    #+#             */
-/*   Updated: 2024/01/30 11:29:03 by mzuloaga         ###   ########.fr       */
+/*   Updated: 2024/06/26 10:46:56 by mzuloaga         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	**ft_split(const char *s, char c)
 		i++;
 	}
 	pointer[i] = NULL;
-	return (pointer); 
+	return (pointer);
 }
 /*int main(void)
 {
