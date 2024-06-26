@@ -4,28 +4,26 @@
 int heredoc_to_infile(t_clarg *clarg)
 {
 	int new_fd;
-	char *line = NULL;
+	char *line;
 
     new_fd = open("karaket.txt", O_RDWR | O_CREAT |O_TRUNC, 0666);
     if (new_fd == -1) 
-    {
-        perror("new_fd");
-        return -1;
-    }
-while (1) 
-{
-    line = get_next_line(STDIN_FILENO);
-    if (line == NULL)
-        break;
-    if (ft_strncmp(line, clarg->hd_delimiter, ft_strlen(clarg->hd_delimiter)) == 0 && line[ft_strlen(clarg->hd_delimiter)] == '\n') 
-    {
-        free(line);
-        break;
-    }
+		cleanup(clarg, INFILE);
+	while (1) 
+	{
+    	line = get_next_line(STDIN_FILENO);
+		if (line == NULL)
+			break;
+		if(ft_strncmp(line, clarg->hd_delimiter, ft_strlen(clarg->hd_delimiter)) == 0
+		&& line[ft_strlen(clarg->hd_delimiter)] == '\n') 
+    	{
+        	free(line);
+        	break;
+    	}
     write(new_fd, line, ft_strlen(line));
     free(line);
-}
-    close(new_fd);
+	}
+	close(new_fd);
     new_fd = open("karaket.txt", O_RDONLY);
     if (new_fd == -1)
         perror("new_file");
@@ -51,7 +49,6 @@ char *	get_cmd_path(t_clarg *clarg, char *cmd)
 			free(end);
 			return NULL;
 		}
-			//return ((char *)cleanup(clarg, STR_JOIN, end));
 		if (access(path_cmd, X_OK) == 0)
 		{
 			free(end);
@@ -119,7 +116,7 @@ void fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg)
     (*clarg)->cmds_header = NULL;
 	(*clarg)->hd_delimiter = NULL; //bonus
 	(*clarg)->infile_fd = -2; //bonus, sentinel value
-    (*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0666); //WHY APPEND?
+    (*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT | O_RDWR | O_TRUNC, 0666);
     if ((*clarg)->outfile_fd == -1)
         cleanup(*clarg, OUTFILE);
     while (*envp && ft_strncmp(*envp, "PATH", 4))
