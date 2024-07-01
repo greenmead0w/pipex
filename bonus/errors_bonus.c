@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./pipex.h"
+#include "./pipex_bonus.h"
 
 /*if errno is not set, it prints "success" after custom message, 
 because of that adding else condition*/

@@ -16,25 +16,27 @@
 char	*get_cmd_path(t_clarg *clarg, char *cmd)
 {
 	char	*path_cmd;
-	cha		*end;
+	char	*end;
 	char	**path_iter;
 
 	end = ft_strjoin("/", cmd);
 	if (end == NULL)
-		return ((char *)cleanup(clarg, STR_JOIN, NULL));
+		return (NULL);
 	path_iter = clarg->path_all;
-	while (*path_iter != NULL)
+	while (*path_iter++ != NULL)
 	{
 		path_cmd = ft_strjoin(*path_iter, end);
 		if (path_cmd == NULL)
-			return ((char *)cleanup(clarg, STR_JOIN, end));
+		{
+			free(end);
+			return (NULL);
+		}
 		if (access(path_cmd, X_OK) == 0)
 		{
 			free(end);
 			return (path_cmd);
 		}
 		free(path_cmd);
-		path_iter++;
 	}
 	free(end);
 	return (NULL);
@@ -98,20 +100,20 @@ void	fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg)
 {
 	*clarg = malloc(sizeof(struct s_clarg));
 	if (*clarg == NULL)
-		cleanup(*clarg, MALLOC, NULL);
+		cleanup(*clarg, MALLOC);
 	(*clarg)->cmds_header = NULL;
 	(*clarg)->infile_fd = open(argv[1], O_RDONLY);
 	if ((*clarg)->infile_fd == -1)
-		cleanup(*clarg, INFILE, NULL);
+		cleanup(*clarg, INFILE);
 	(*clarg)->outfile_fd = open(argv[argc - 1],
 			O_CREAT | O_RDWR | O_TRUNC, 0777);
 	if ((*clarg)->outfile_fd == -1)
-		cleanup(*clarg, OUTFILE, NULL);
+		cleanup(*clarg, OUTFILE);
 	while (*envp && ft_strncmp(*envp, "PATH", 4))
 		envp++;
 	if (*envp == NULL)
-		cleanup(*clarg, NO_PATH, NULL);
+		cleanup(*clarg, NO_PATH);
 	(*clarg)->path_all = ft_split(*envp + 5, ':');
 	if ((*clarg)->path_all == NULL || *((*clarg)->path_all) == NULL)
-		cleanup(*clarg, SPLIT, NULL);
+		cleanup(*clarg, SPLIT);
 }

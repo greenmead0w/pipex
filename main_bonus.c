@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./pipex.h"
+#include "./bonus/pipex_bonus.h"
 
 /*
 executes cmd and writes output to pipe or outfile depending on if its last cmd 

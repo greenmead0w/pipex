@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./pipex.h"
+#include "./pipex_bonus.h"
 
 t_lcmd	*create_node(char *path_cmd, char **cmd)
 {

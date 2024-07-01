@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "./pipex.h"
+#include "./pipex_bonus.h"
 
 //writes input from here_doc to a newly created infile using get next line
 int	heredoc_to_infile(t_clarg *clarg)
@@ -140,8 +140,12 @@ void	fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg)
 	(*clarg)->cmds_header = NULL;
 	(*clarg)->hd_delim = NULL;
 	(*clarg)->infile_fd = -2;
-	(*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT
+	if (argc == 5)
+		(*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT
 			| O_RDWR | O_TRUNC, 0666);
+	else
+		(*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT
+			| O_RDWR | O_APPEND, 0666);	
 	if ((*clarg)->outfile_fd == -1)
 		cleanup(*clarg, OUTFILE);
 	while (*envp && ft_strncmp(*envp, "PATH", 4))

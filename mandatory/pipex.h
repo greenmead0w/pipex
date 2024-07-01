@@ -16,7 +16,7 @@
 #include <stdlib.h> // malloc, free 
 #include <stdio.h> // perror
 #include <errno.h>
-#include "./pipex_libft/libft.h"
+#include "../pipex_libft/libft.h"
 
 //List of errors to print
 
@@ -60,7 +60,7 @@ typedef struct s_lcmd
 void	*handle_error(const char *message);
 void	free_split(char ***cmd);
 void	free_lcmd_list(t_lcmd *head);
-void	*cleanup(t_clarg *clarg, char *message, char *flag);
+void	*cleanup(t_clarg *clarg, char *message);
 
 //parsing.c
 void	fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg);

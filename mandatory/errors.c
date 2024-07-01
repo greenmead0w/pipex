@@ -66,20 +66,19 @@ void	free_lcmd_list(t_lcmd *head)
 }
 
 //flag only non-null when ft_strjoin returns null
-void	*cleanup(t_clarg *clarg, char *message, char *flag)
+void	*cleanup(t_clarg *clarg, char *message)
 {
-	if (flag != NULL)
-		free(flag);
+	
 	if (clarg != NULL)
 	{
-		if (clarg->infile_fd != -1)
-			close(clarg->infile_fd);
+		close(clarg->infile_fd);
 		close(clarg->outfile_fd);
 		free_split(&(clarg->path_all));
 		if (clarg->cmds_header != NULL)
 			free_lcmd_list(clarg->cmds_header);
 		free(clarg);
 	}
-	handle_error(message);
+	if (ft_strncmp(message, END, ft_strlen(message)) != 0)
+		handle_error(message);
 	return (0);
 }

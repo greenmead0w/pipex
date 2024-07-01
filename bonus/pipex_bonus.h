@@ -16,7 +16,7 @@
 #include <stdlib.h> // malloc, free 
 #include <stdio.h> // perror
 #include <errno.h>
-#include "./pipex_libft/libft.h"
+#include "../pipex_libft/libft.h"
 
 //List of errors to print
 
