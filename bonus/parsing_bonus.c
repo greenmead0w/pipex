@@ -140,7 +140,7 @@ void	fill_clarg(int argc, char **argv, char **envp, t_clarg **clarg)
 	(*clarg)->cmds_header = NULL;
 	(*clarg)->hd_delim = NULL;
 	(*clarg)->infile_fd = -2;
-	if (argc == 5)
+	if (ft_strncmp(argv[1], "here_doc", ft_strlen(argv[1])))
 		(*clarg)->outfile_fd = open(argv[argc - 1], O_CREAT
 			| O_RDWR | O_TRUNC, 0666);
 	else
